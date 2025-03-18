@@ -1,30 +1,22 @@
-import React from 'react'
+import React from 'react';
+import GenericMenu from './GenericMenu';
 
-import {Button2} from './Button2'
-export default function Hero3Menu({clickHandler}) {
+const heroItems = [
+  { key: 'recetas', label: 'Recetas', tooltip: 'Ver recetas' },
+  { key: 'prescripcion', label: 'Prescripcion', tooltip: 'Ver prescripcion' },
+  { key: 'laboratorio', label: 'Laboratorio', tooltip: 'Ver laboratorio' },
+  { key: 'consultas', label: 'Consultas', tooltip: 'Ver consultas' },
+  { key: 'imagenes', label: 'Imagenes Medicas', tooltip: 'Ver imagenes medicas' },
+];
+
+const Hero3Menu = ({ clickHandler, activeSection }) => {
+  const handleClick = (item) => {
+    clickHandler(item.key);
+  };
+
   return (
-    <div className=' w-full '>
-      <div className=' flex justify-around py-5 '>
-        <div className="relative  w-[160px] group">
-          <Button2 clickHandler={()=>clickHandler("recetas")} >Recetas</Button2>
-        </div>
-        <div className="relative  w-[160px] group">
-           <Button2 clickHandler={()=>clickHandler("prescripcion")} >Prescripcion</Button2>
-        </div> 
-      </div>
-      <div className=' flex justify-around py-5 '>
-        <div className="relative  w-[160px] group">
-           <Button2 clickHandler={()=>clickHandler("laboratorio")} >Laboratorio</Button2>
-        </div> 
-        <div className="relative  w-[160px] group">
-           <Button2 clickHandler={()=>clickHandler("consultas")} >Consultas</Button2>
-        </div>    
-      </div>
-      <div className=' flex justify-around py-5 '>
-       <div className="relative  w-[160px] group">
-           <Button2 clickHandler={()=>clickHandler("imagenes")} >Imagenes Medicas</Button2>
-        </div> 
-      </div>
-    </div>
-  )
-}
+    <GenericMenu items={heroItems} activeKey={activeSection} onItemClick={handleClick} />
+  );
+};
+
+export default Hero3Menu;

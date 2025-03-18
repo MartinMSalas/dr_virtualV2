@@ -1,100 +1,76 @@
-import React,{useState} from 'react'
-import ObraSocial2 from './ObraSocial2'
-
+import React, { useState } from 'react';
+import ObraSocial2 from './ObraSocial2';
 import ApiMeli from './ApiMeli';
 import { FormBasico3 } from './FormBasico3';
-
 import ImagenesMedicasMenu from './ImagenesMedicasMenu';
 import ImagenesEcografia from './ImagenesEcografia';
 import ImagenesTomografia from './ImagenesTomografia';
 import ImagenesResonancia from './ImagenesResonancia';
 
-export const ImagenesMedicas=()=> {
-  
-  
-  const [especialidadSelected, setEspecialidadSelected] = useState("");
-  const [obraSocialSelected, setObraSocialSelected] = useState(""); //osep, swiss, etc
-  
-  const [obraSocialClick, setObraSocialClick] = useState(false);
-  const [especialidadClick, setEspecialidadClick] = useState(false);
+const ImagenesMedicas = () => {
+  // Pasos: 'modality' | 'specialized' | 'obraSocial' | 'form' | 'submitted'
+  const [step, setStep] = useState('modality');
+  const [selectedModality, setSelectedModality] = useState('');
+  const [obraSocialSelected, setObraSocialSelected] = useState('');
 
-
-  const [especialidadEcografiaHabilitacion,setEspecialidadEcografiaHabilitacion]=useState(false);
- 
-  const [especialidadTomografiaHabilitacion,setEspecialidadTomografiaHabilitacion]=useState(false);
-  const [especialidadResonanciaHabilitacion,setEspecialidadResonanciaHabilitacion]=useState(false);
-
-  const [formSubmited, setFormSubmited] = useState(false);
-
-  function clickHandlerEspecialidades(especialidadName){
-    setObraSocialClick(false);
-    console.log(`La especialidad seleccionada es ${especialidadName}`)
-
-    setEspecialidadSelected(especialidadName);
-    setEspecialidadEcografiaHabilitacion(false)
-    setEspecialidadTomografiaHabilitacion(false)
-    setEspecialidadResonanciaHabilitacion(false)
-    if (!especialidadClick) {
-      if (especialidadName==="ecografias") {
-        setEspecialidadEcografiaHabilitacion(true)
-      }else if(especialidadName==="tomografias"){
-        setEspecialidadTomografiaHabilitacion(true)
-      }else if(especialidadName==="resonancias"){
-        setEspecialidadResonanciaHabilitacion(true)
-      }else 
-      setEspecialidadClick(true);
-    }else
-    {
-      setEspecialidadClick(false);
-
-
-    }
-  }
-  // Segundo nivel
-
-  function clickHandlerObraSocial(obraSocialName){
-    console.log(obraSocialName)
-    setObraSocialSelected(obraSocialName);
-    setFormSubmited(false);
-
-    if (!obraSocialClick) {
-      console.log("osep", obraSocialClick);
-      setObraSocialClick(true);
+  const handleModalitySelect = (modality) => {
+    setSelectedModality(modality);
+    if (modality === 'radiografias') {
+      // Radiografias no requiere menú especializado.
+      setStep('obraSocial');
     } else {
-      setObraSocialClick(false);
+      // Para ecografias, tomografias o resonancias se muestra componente especializado.
+      setStep('specialized');
     }
-  }
-  function formHandler(data){  
-    console.log(especialidadSelected)
-    if (!formSubmited) {
-      setFormSubmited(true);
-     } else {
-      setFormSubmited(false);
-    }
-    console.log(data)
-  }
+  };
 
+  // Callback desde el componente especializado (por ejemplo, ecografias)
+  const handleSpecializedComplete = () => {
+    setStep('obraSocial');
+  };
 
+  const handleObraSocialSelect = (obraSocialName) => {
+    setObraSocialSelected(obraSocialName);
+    setStep('form');
+  };
+
+  const handleFormSubmit = (data) => {
+    console.log('Form Data:', data);
+    setStep('submitted');
+  };
 
   return (
-    <>  
-      <ImagenesMedicasMenu clickHandler={clickHandlerEspecialidades}></ImagenesMedicasMenu>
+    <>
+      <ImagenesMedicasMenu
+        clickHandler={handleModalitySelect}
+        activeModality={selectedModality}
+      />
 
-      
-      {especialidadEcografiaHabilitacion && <ImagenesEcografia></ImagenesEcografia>}
-      
-      {especialidadTomografiaHabilitacion && <ImagenesTomografia></ImagenesTomografia>}
-      {especialidadResonanciaHabilitacion && <ImagenesResonancia></ImagenesResonancia>}
+      {step === 'specialized' && selectedModality === 'ecografias' && (
+        <ImagenesEcografia onComplete={handleSpecializedComplete} />
+      )}
+      {step === 'specialized' && selectedModality === 'tomografias' && (
+        <ImagenesTomografia onComplete={handleSpecializedComplete} />
+      )}
+      {step === 'specialized' && selectedModality === 'resonancias' && (
+        <ImagenesResonancia onComplete={handleSpecializedComplete} />
+      )}
 
+      {step === 'obraSocial' && (
+        <ObraSocial2 clickHandler={handleObraSocialSelect} />
+      )}
 
-     
-      
-      {especialidadClick && <ObraSocial2 clickHandler={clickHandlerObraSocial}></ObraSocial2>}
-      {obraSocialClick && (<FormBasico3 formHandler={formHandler} obraSocialSelected={obraSocialSelected} especialidadSelected={especialidadSelected}></FormBasico3>)}
+      {step === 'form' && (
+        <FormBasico3
+          formHandler={handleFormSubmit}
+          obraSocialSelected={obraSocialSelected}
+          especialidadSelected={selectedModality}
+        />
+      )}
 
-      {formSubmited && <ApiMeli></ApiMeli>}
+      {step === 'submitted' && <ApiMeli />}
     </>
+  );
+};
 
-  )
-}
-
+export default ImagenesMedicas;

@@ -5,7 +5,7 @@ import Hero3 from "./components/Hero3"
 
 
 const App = () =>  (
-  <div className='bg-emerald-50 w-full grid '>
+  <div className='bg-emerald-50 w-full h-full grid '>
     <div className={` `}>
       <div className={``}>
        

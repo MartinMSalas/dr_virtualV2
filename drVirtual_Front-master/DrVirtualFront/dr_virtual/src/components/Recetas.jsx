@@ -1,44 +1,51 @@
-import React,{useState} from 'react'
-import ObraSocial2 from './ObraSocial2'
+import React, { useState } from 'react';
 import { FormBasico3 } from './FormBasico3';
 import ApiMeli from './ApiMeli';
-export const Recetas=()=> {
+import CuponMeli from './CuponMeli';
 
-  const [obraSocialClick, setObraSocialClick] = useState(false);
-  const [obraSocialSelected, setObraSocialSelected] = useState(""); //osep, swiss, etc
+export const Recetas = () => {
   const [formSubmited, setFormSubmited] = useState(false);
 
-  const [data, setData] = useState({});
-  
-  function clickHandlerObraSocial(obraSocialName){
-    console.log(obraSocialName)
-    setObraSocialSelected(obraSocialName);
-    setFormSubmited(false);
-
-    if (!obraSocialClick) {
-      console.log("osep", obraSocialClick);
-      setObraSocialClick(true);
-    } else {
-      setObraSocialClick(false);
+  // Array dinámico con nuevos campos para el formulario
+  const extraFields = [
+    {
+      name: "textoReceta",
+      label: "Texto de Receta",
+      type: "text",
+      placeholder: "Ingrese el texto de receta"
+    },
+    {
+      name: "dolencia",
+      label: "Dolencia",
+      type: "text",
+      placeholder: "Ingrese la dolencia"
     }
-  }
-  function formHandler(data){
-  
+  ];
+
+  function formHandler(data) {
     if (!formSubmited) {
       setFormSubmited(true);
     } else {
       setFormSubmited(false);
     }
-    console.log(data)
-
+    console.log(data);
   }
+
   return (
-    <>
-      <ObraSocial2 clickHandler={clickHandlerObraSocial}></ObraSocial2>
-      {obraSocialClick && (<FormBasico3 formHandler={formHandler} especialidadSelected={"Receta"} obraSocialSelected={obraSocialSelected}></FormBasico3>)}
-      {formSubmited && <ApiMeli></ApiMeli>}
+    <>{
+      /*
+
+
+     
+      */
+    }
+
+    <FormBasico3 
+        formHandler={formHandler} 
+        especialidadSelected={"Receta"}
+        extraFields={extraFields}
+      />
+      {formSubmited && <CuponMeli />}
     </>
-
-  )
-}
-
+  );
+};

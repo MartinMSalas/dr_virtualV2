@@ -1,44 +1,35 @@
-import React,{useState} from 'react'
-import ObraSocial2 from './ObraSocial2'
+import React, { useState } from 'react';
 import { FormBasico3 } from './FormBasico3';
-import ApiMeli from './ApiMeli';
-export const Consultas=()=> {
+import CuponMeli from './CuponMeli';
 
-  const [obraSocialClick, setObraSocialClick] = useState(false);
-  const [obraSocialSelected, setObraSocialSelected] = useState(""); //osep, swiss, etc
+export const Consultas = () => {
   const [formSubmited, setFormSubmited] = useState(false);
 
-  const [data, setData] = useState({});
-  
-  function clickHandlerObraSocial(obraSocialName){
-    console.log(obraSocialName)
-    setObraSocialSelected(obraSocialName);
-    setFormSubmited(false);
+  // Extra field for Consultas: "Detalle consulta médica"
+  const extraFields = [
+    {
+      name: "detalleConsulta",
+      label: "Detalle consulta médica",
+      type: "text",
+      placeholder: "Ingrese el detalle de la consulta médica",
+    },
+  ];
 
-    if (!obraSocialClick) {
-      console.log("osep", obraSocialClick);
-      setObraSocialClick(true);
-    } else {
-      setObraSocialClick(false);
-    }
+  function formHandler(data) {
+    console.log(data);
+    setFormSubmited(true);
   }
-  function formHandler(data){
-  
-    if (!formSubmited) {
-      setFormSubmited(true);
-    } else {
-      setFormSubmited(false);
-    }
-    console.log(data)
 
-  }
   return (
     <>
-      <ObraSocial2 clickHandler={clickHandlerObraSocial}></ObraSocial2>
-      {obraSocialClick && (<FormBasico3 formHandler={formHandler} especialidadSelected={"Consulta"} obraSocialSelected={obraSocialSelected}></FormBasico3>)}
-      {formSubmited && <ApiMeli></ApiMeli>}
+      <FormBasico3 
+        formHandler={formHandler} 
+        especialidadSelected="Consultas"
+        extraFields={extraFields}
+      />
+      {formSubmited && <CuponMeli productTitle="Consultas" />}
     </>
+  );
+};
 
-  )
-}
-
+export default Consultas;

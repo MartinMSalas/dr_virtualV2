@@ -1,30 +1,25 @@
-import React from 'react'
-import {Button2} from './Button2'
+import React from 'react';
+import GenericMenu from './GenericMenu';
 
-export default function ImagenesMedicasMenu({clickHandler}) {
-  
+const modalities = [
+  { key: 'radiografias', label: 'Radiografias', tooltip: 'Ver radiografias' },
+  { key: 'ecografias', label: 'Ecografias', tooltip: 'Ver ecografias' },
+  { key: 'tomografias', label: 'Tomografia Axial Computada', tooltip: 'Ver tomografias' },
+  { key: 'resonancias', label: 'Resonancia Nuclear Magnetica', tooltip: 'Ver resonancias' },
+];
+
+const ImagenesMedicasMenu = ({ clickHandler, activeModality }) => {
+  const handleClick = (item) => {
+    clickHandler(item.key);
+  };
+
   return (
-    <div className=' w-full  '>
-      <div className=' flex justify-around py-5 '>
-        <div className="relative  w-[160px] h-12 group">
-          <Button2 clickHandler={()=>clickHandler("radiografias")} >Radiografias</Button2>
-        </div>
-        <div className="relative  w-[160px] h-12 group">
-          <Button2 clickHandler={()=>clickHandler("ecografias")} >Ecografias</Button2>
-        </div>     
-      </div>
+    <GenericMenu
+      items={modalities}
+      activeKey={activeModality}
+      onItemClick={handleClick}
+    />
+  );
+};
 
-      <div className=' flex justify-around py-5 '>
-        <div className="relative  w-[160px] group">                
-          <Button2 clickHandler={()=>clickHandler("tomografias")}>Tomografia Axial Computada </Button2>
-        </div>
-        <div className="relative  w-[160px] group">
-          <Button2 clickHandler={()=>clickHandler("resonancias")}>Resonancia Nuclear Magnetica</Button2>
-        </div>     
-      </div>
-
-
-
-    </div>
-  )
-}
+export default ImagenesMedicasMenu;

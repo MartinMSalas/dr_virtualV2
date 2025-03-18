@@ -1,37 +1,28 @@
-import React from 'react'
-import {Button2} from './Button2'
-export default function EcografiaMenu({clickHandler}) {
+import React from 'react';
+import GenericMenu from './GenericMenu';
+
+const ecografiaSubtypes = [
+  { key: 'articular', label: 'Ecografia Articular y de partes blandas', tooltip: 'Ver articular' },
+  { key: 'abdomen', label: 'Ecografia de Abdomen', tooltip: 'Ver abdomen' },
+  { key: 'genitales', label: 'Ecografia de Genitales y Obstetricia', tooltip: 'Ver genitales' },
+  { key: 'glandulas', label: 'Ecografia de Glandulas', tooltip: 'Ver glandulas' },
+  { key: 'renal', label: 'Ecografia Renal', tooltip: 'Ver renal' },
+  { key: 'venosa', label: 'Ecografia Venosa', tooltip: 'Ver venosa' },
+];
+
+const EcografiaMenu = ({ clickHandler, activeSubtype }) => {
+  const handleClick = (item) => {
+    clickHandler(item.key);
+  };
+
   return (
-    <div className=" w-full  ">
-      <div>
-        <h2 className="text-center text-m font-bold p-8 text-rose-800 w">
-          Por favor, seleccione el tipo de Ecografia
-        </h2>
+    <div className="w-full">
+      <div className="text-center text-m font-bold p-8 text-rose-800">
+        Por favor, seleccione el tipo de Ecografia
       </div>
-      <div className=" flex justify-around py-5 ">
-        <div className="relative  w-[160px] h-12 group">
-          <Button2 clickHandler={()=>clickHandler("articular")}>Ecografia Articular y de partes blandas</Button2>
-        </div>
-        <div className="relative  w-[160px] h-12 group">
-          <Button2 clickHandler={()=>clickHandler("abdomen")}>Ecografia de Abdomen</Button2>
-        </div>
-      </div>
-      <div className=" flex justify-around py-5 ">
-        <div className="relative  w-[160px] h-12 group">
-          <Button2 clickHandler={()=>clickHandler("genitales")}>Ecografia de Genitales y Obstetricia</Button2>
-        </div>
-        <div className="relative  w-[160px] h-12 group">
-          <Button2 clickHandler={()=>clickHandler("glandulas")}>Ecografia de Glandulas</Button2>
-        </div>
-      </div>
-      <div className=" flex justify-around py-5 ">
-        <div className="relative  w-[160px] h-12 group">
-          <Button2 clickHandler={()=>clickHandler("renal")}>Ecografia Renal</Button2>
-        </div>
-        <div className="relative  w-[160px] h-12 group">
-          <Button2 clickHandler={()=>clickHandler("venosa")}>Ecografia Venosa</Button2>
-        </div>
-      </div>
+      <GenericMenu items={ecografiaSubtypes} activeKey={activeSubtype} onItemClick={handleClick} />
     </div>
-  )
-}
+  );
+};
+
+export default EcografiaMenu;

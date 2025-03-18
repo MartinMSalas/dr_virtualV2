@@ -1,107 +1,79 @@
-import React,{useState} from 'react'
-import ObraSocial2 from './ObraSocial2'
-
+import React, { useState } from 'react';
+import ObraSocial2 from './ObraSocial2';
 import ApiMeli from './ApiMeli';
 import PrescripcionEspecialidades from './PrescripcionEspecialidades';
 import { FormBasico3 } from './FormBasico3';
 import FormFisioExtra from './FormFisioExtra';
 import FormInterconsultaExtra from './FormInterconsultaExtra';
 
+export const Prescripcion = () => {
+  // Steps: 'especialidades' | 'obraSocial' | 'form' | 'formFisio' | 'formInterconsulta' | 'submitted'
+  const [step, setStep] = useState('especialidades');
+  const [especialidadSelected, setEspecialidadSelected] = useState('');
+  const [obraSocialSelected, setObraSocialSelected] = useState('');
+  const [fisioExtraData, setFisioExtraData] = useState(null);
+  const [interconsultaExtraData, setInterconsultaExtraData] = useState(null);
 
-export const Prescripcion=()=> {
-  
-  
-  const [especialidadSelected, setEspecialidadSelected] = useState("");
-  const [obraSocialSelected, setObraSocialSelected] = useState(""); //osep, swiss, etc
-  const [fisioExtraData, setFisioExtraData] = useState(false);
-  const [interconsultaExtraData, setInterconsultaExtraData] = useState(false);
-
-  const [obraSocialClick, setObraSocialClick] = useState(false);
-  const [especialidadClick, setEspecialidadClick] = useState(false);
-  const [formSubmited, setFormSubmited] = useState(false);
-  const [formFisioExtra,setFormFisioExtra]=useState(false);
-  const [formInterconsultaExtra,setFormInterconsultaExtra]=useState(false);
-
-  
-
-  function clickHandlerEspecialidades(especialidadName){
-    setObraSocialClick(false);
-    setFormSubmited(false);
-    setFormFisioExtra(false)
-
-    console.log(especialidadName)
+  // Handler for selecting the specialty
+  const handleEspecialidadSelect = (especialidadName) => {
     setEspecialidadSelected(especialidadName);
-    if (!especialidadClick) {
-     
-      setEspecialidadClick(true);
-    }else
-    {
-      setEspecialidadClick(false);
-    }
-  }
-  function clickHandlerObraSocial(obraSocialName){
-    console.log(obraSocialName)
+    setStep('obraSocial');
+  };
+
+  // Handler for selecting the obra social
+  const handleObraSocialSelect = (obraSocialName) => {
     setObraSocialSelected(obraSocialName);
-    setFormSubmited(false);
+    setStep('form');
+  };
 
-    if (!obraSocialClick) {
-      console.log("osep", obraSocialClick);
-      setObraSocialClick(true);
+  // Handler for the basic form submission
+  const handleFormSubmit = (data) => {
+    console.log('Form Data:', data);
+    if (especialidadSelected === 'fisioterapia') {
+      setStep('formFisio');
+    } else if (especialidadSelected === 'interconsultas') {
+      setStep('formInterconsulta');
     } else {
-      setObraSocialClick(false);
+      setStep('submitted');
     }
-  }
-  function formHandler(data){  
-    console.log(especialidadSelected)
-    if (!formSubmited) {
-      if(especialidadSelected==="fisioterapia")
-      {
-        
-        setFormFisioExtra(true)
-      }else if(especialidadSelected==="interconsultas"){
-        
-        setFormInterconsultaExtra(true)
-      }    
-      else{
-      
-        setFormSubmited(true);
-      }
-    } else {
-      setFormFisioExtra(false)
-      setFormSubmited(false);
-    }
-    console.log(data)
-  }
-  function formFisioHandler(data){
+  };
+
+  // Handler for fisioterapia extra form submission
+  const handleFormFisioSubmit = (data) => {
     setFisioExtraData(data);
-    console.log(`se recibio ${data}`)
-    if (!formSubmited){
-      setFormSubmited(true);
-    }else{
-      setFormSubmited(false);
-    }
-  }
-  function formInterconsultaHandler(data){
-    setInterconsultaExtraData(data);
-    //console.log(`se recibio ${data}`)
-    if (!formSubmited){
-      setFormSubmited(true);
-    }else{
-      setFormSubmited(false);
-    }
-  }
+    console.log('Fisio Extra Data:', data);
+    setStep('submitted');
+  };
 
+  // Handler for interconsulta extra form submission
+  const handleFormInterconsultaSubmit = (data) => {
+    setInterconsultaExtraData(data);
+    console.log('Interconsulta Extra Data:', data);
+    setStep('submitted');
+  };
 
   return (
-    <>  
-      <PrescripcionEspecialidades clickHandler={clickHandlerEspecialidades}></PrescripcionEspecialidades>
-      {especialidadClick && <ObraSocial2 clickHandler={clickHandlerObraSocial}></ObraSocial2>}
-      {obraSocialClick && (<FormBasico3 formHandler={formHandler} obraSocialSelected={obraSocialSelected} especialidadSelected={especialidadSelected}></FormBasico3>)}
-      {formFisioExtra && <FormFisioExtra formFisioHandler={formFisioHandler}></FormFisioExtra>}
-      {formInterconsultaExtra && <FormInterconsultaExtra formInterconsultaHandler={formInterconsultaHandler}></FormInterconsultaExtra>}
-      {formSubmited && <ApiMeli></ApiMeli>}
+    <>
+      {step === 'especialidades' && (
+        <PrescripcionEspecialidades clickHandler={handleEspecialidadSelect} />
+      )}
+      {step === 'obraSocial' && (
+        <ObraSocial2 clickHandler={handleObraSocialSelect} />
+      )}
+      {step === 'form' && (
+        <FormBasico3
+          formHandler={handleFormSubmit}
+          obraSocialSelected={obraSocialSelected}
+          especialidadSelected={especialidadSelected}
+        />
+      )}
+      {step === 'formFisio' && (
+        <FormFisioExtra formFisioHandler={handleFormFisioSubmit} />
+      )}
+      {step === 'formInterconsulta' && (
+        <FormInterconsultaExtra formInterconsultaHandler={handleFormInterconsultaSubmit} />
+      )}
+      {step === 'submitted' && <ApiMeli />}
     </>
-
-  )
-}
-
+  );
+};

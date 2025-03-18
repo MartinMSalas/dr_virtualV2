@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { FormBasico3 } from './FormBasico3';
 import CuponMeli from './CuponMeli';
 
-export const Laboratorio = () => {
+export const Radiografia = () => {
   const [formSubmited, setFormSubmited] = useState(false);
 
-  // Extra field for Laboratory: "Pedido de análisis de laboratorio"
+  // Extra field: "Detalle pedido de radiografía"
   const extraFields = [
     {
-      name: "pedidoAnalisis",
-      label: "Pedido de análisis de laboratorio",
+      name: "detalleRadiografia",
+      label: "Detalle pedido de radiografía",
       type: "text",
-      placeholder: "Ingrese el pedido de análisis de laboratorio",
-    },
+      placeholder: "Ingrese el detalle de la radiografía"
+    }
   ];
 
   function formHandler(data) {
@@ -24,12 +24,12 @@ export const Laboratorio = () => {
     <>
       <FormBasico3 
         formHandler={formHandler} 
-        especialidadSelected="Laboratorio"
+        especialidadSelected="Radiografía"
         extraFields={extraFields}
       />
-      {formSubmited && <CuponMeli productTitle="Laboratorio" />}
+      {formSubmited && <CuponMeli productTitle="Radiografía" />}
     </>
   );
 };
 
-export default Laboratorio;
+export default Radiografia;

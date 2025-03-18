@@ -10,6 +10,20 @@
   cursor: pointer;
   position: relative;
 }
+@keyframes grow {
+  from {
+    transform: scale(0.75);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.grow-animation {
+  animation: grow 0.3s ease-out;
+}
 
 .button2:first-child:hover{ 
   background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4 );
